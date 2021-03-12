@@ -24,11 +24,10 @@ const addTodo = (req, res) => {
 
 const fetchTodo = (req, res) => {
   try {
-    const fetchedTodo = req.todo;
     res.status(200).json({
       status: 'Success',
       message: 'Todo fetched successfully',
-      data: fetchedTodo,
+      data: req.todo,
     });
   } catch (error) {
     res.status(500).json({
@@ -82,6 +81,21 @@ const allTodos = (req, res) => {
     });
   }
 };
+const adminAllTodos = (req, res) => {
+  try {
+    const todoListAdmin = getAllTodos();
+    res.status(200).json({
+      status: 'Success',
+      message: 'All Todos fetched successfully',
+      data: todoListAdmin,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'Fail',
+      message: 'Something went wrong',
+    });
+  }
+};
 
 module.exports = {
   addTodo,
@@ -89,4 +103,5 @@ module.exports = {
   updateTodo,
   deleteTheTodo,
   allTodos,
+  adminAllTodos,
 };

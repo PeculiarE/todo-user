@@ -1,10 +1,21 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const bcrypt = require('bcryptjs');
+
+const salt = bcrypt.genSaltSync(10);
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const addDataToToken = (data) => jwt.sign(data, jwtSecret, { expiresIn: '1h' });
+const convertDataToToken = (data) => jwt.sign(data, jwtSecret, { expiresIn: '1h' });
 
-const verifyToken = (token) => jwt.verify(token, jwtSecret);
+const verifyToken = (token) => jwt.verify(token, jwtSecret, (err, data) => ({ err, data }));
 
-module.exports = { addDataToToken, verifyToken };
+const hashPassword = (password) => bcrypt.hashSync(password, salt);
+
+const comparePassword = (plainPassword, hashedPassword) => (
+  bcrypt.compareSync(plainPassword, hashedPassword)
+);
+
+module.exports = {
+  convertDataToToken, verifyToken, hashPassword, comparePassword,
+};

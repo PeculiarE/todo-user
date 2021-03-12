@@ -2,11 +2,13 @@ const { v4: uuidv4 } = require('uuid');
 const { userArray } = require('../models');
 
 const addNewUser = (data) => {
-  userArray.push({
+  const obj = {
     ...data,
     id: uuidv4(),
     isAdmin: false,
-  });
+  };
+  userArray.push(obj);
+  return obj;
 };
 
 const getSingleUserById = (id) => userArray.find((el) => el.id === id);
@@ -18,8 +20,8 @@ const findUserIndex = (id) => userArray.findIndex((el) => el.id === id);
 const updateSingleUserProfile = (data, id) => {
   const userDetails = getSingleUserById(id);
   const updatedProfile = {
-    ...data,
     ...userDetails,
+    ...data,
   };
   const index = findUserIndex(id);
   userArray[index] = updatedProfile;

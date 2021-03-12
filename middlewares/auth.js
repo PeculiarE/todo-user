@@ -10,15 +10,37 @@ const authenticate = (req, res, next) => {
       });
     }
     const token = authorization.split(' ')[1];
-    const decoded = verifyToken(token);
-    req.user = decoded;
+    const { err, data } = verifyToken(token);
+    if (err) {
+      return res.status(401).json({
+        status: 'Fail',
+        message: 'You need to be signed in',
+      });
+    }
+    req.user = data;
     return next();
   } catch (error) {
-    return res.status(401).json({
+    return res.status(500).json({
       status: 'Fail',
-      message: 'You need to be signed in',
+      message: 'Something went wrong',
+    });
+  }
+};
+const adminAccessValidator = (req, res, next) => {
+  try {
+    if (req.user.isAdmin) {
+      return next();
+    }
+    return res.status(403).json({
+      status: 'Fail',
+      message: 'Only admins can access this.',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'Fail',
+      message: 'Something went wrong',
     });
   }
 };
 
-module.exports = authenticate;
+module.exports = { authenticate, adminAccessValidator };

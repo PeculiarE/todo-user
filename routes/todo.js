@@ -11,6 +11,7 @@ const {
   checkIfTodoExists,
   checkIfTodoIsForCurrentUser,
   validateTodoAddition,
+  adminAccessValidator,
 } = require('../middlewares');
 
 const todoRouter = Router();
@@ -18,6 +19,7 @@ todoRouter.use(authenticate);
 
 todoRouter.post('/todo', validateTodoAddition, addTodo);
 todoRouter.get('/todo', allTodos);
+todoRouter.get('/todos', adminAccessValidator, allTodos);
 
 todoRouter.use('/todo/:todoId', checkIfTodoExists, checkIfTodoIsForCurrentUser);
 

@@ -1,13 +1,19 @@
 const { addNewUser, getSingleUserByEmail } = require('../services');
 
-const { addDataToToken } = require('../utils');
+const { convertDataToToken, hashPassword, comparePassword } = require('../utils');
 
 const registerUser = (req, res) => {
   try {
-    addNewUser(req.body);
+    const encryptedPassword = hashPassword(req.body.password);
+    const userInfo = {
+      ...req.body,
+      password: encryptedPassword,
+    };
+    const updatedUserInfo = addNewUser(userInfo);
     res.status(201).json({
       status: 'Success',
       message: 'Registration successful',
+      data: updatedUserInfo,
     });
   } catch (error) {
     res.status(500).json({
@@ -21,10 +27,10 @@ const loginUser = (req, res) => {
   try {
     const { email, password } = req.body;
     const user = getSingleUserByEmail(email);
+    const isPasswordCorrect = comparePassword(password, user.password);
 
-    if (user && user.password === password) {
-      const token = addDataToToken({ email, isAdmin: user.isAdmin });
-      console.log({ email });
+    if (user && isPasswordCorrect) {
+      const token = convertDataToToken({ email, isAdmin: user.isAdmin });
       return res.status(201).json({
         status: 'Success',
         message: 'Login successful',
