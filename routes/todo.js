@@ -5,6 +5,7 @@ const {
   updateTodo,
   deleteTheTodo,
   allTodos,
+  adminAllTodos,
 } = require('../controllers');
 const {
   authenticate,
@@ -19,7 +20,7 @@ todoRouter.use(authenticate);
 
 todoRouter.post('/todo', validateTodoAddition, addTodo);
 todoRouter.get('/todo', allTodos);
-todoRouter.get('/todos', adminAccessValidator, allTodos);
+todoRouter.get('/todos', adminAccessValidator, adminAllTodos);
 
 todoRouter.use('/todo/:todoId', checkIfTodoExists, checkIfTodoIsForCurrentUser);
 
