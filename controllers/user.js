@@ -2,14 +2,15 @@ const { addNewUser, getSingleUserByEmail } = require('../services');
 
 const { convertDataToToken, hashPassword, comparePassword } = require('../utils');
 
-const registerUser = (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const encryptedPassword = hashPassword(req.body.password);
     const userInfo = {
       ...req.body,
       password: encryptedPassword,
     };
-    const updatedUserInfo = addNewUser(userInfo);
+    const updatedUserInfo = await addNewUser(userInfo);
+    delete updatedUserInfo.password;
     res.status(201).json({
       status: 'Success',
       message: 'Registration successful',
@@ -23,18 +24,19 @@ const registerUser = (req, res) => {
   }
 };
 
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = getSingleUserByEmail(email);
+    const user = await getSingleUserByEmail(email);
     const isPasswordCorrect = comparePassword(password, user.password);
 
     if (user && isPasswordCorrect) {
-      const token = convertDataToToken({ email, isAdmin: user.isAdmin });
+      const token = convertDataToToken({ email, is_admin: user.is_admin, id: user.id });
+      delete user.password;
       return res.status(201).json({
         status: 'Success',
         message: 'Login successful',
-        data: { token },
+        data: { token, user },
       });
     }
     return res.status(401).json({

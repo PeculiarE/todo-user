@@ -4,7 +4,7 @@ const {
   fetchTodo,
   updateTodo,
   deleteTheTodo,
-  allTodos,
+  allTodosForSingleUser,
   adminAllTodos,
 } = require('./todo');
 
@@ -15,6 +15,6 @@ module.exports = {
   fetchTodo,
   updateTodo,
   deleteTheTodo,
-  allTodos,
+  allTodosForSingleUser,
   adminAllTodos,
 };

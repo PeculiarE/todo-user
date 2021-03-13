@@ -28,7 +28,7 @@ const authenticate = (req, res, next) => {
 };
 const adminAccessValidator = (req, res, next) => {
   try {
-    if (req.user.isAdmin) {
+    if (req.user.is_admin) {
       return next();
     }
     return res.status(403).json({

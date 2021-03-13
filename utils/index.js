@@ -1,7 +1,7 @@
 const {
-  convertDataToToken, verifyToken, hashPassword, comparePassword,
+  convertDataToToken, verifyToken, hashPassword, comparePassword, generateUUID,
 } = require('./helpers');
 
 module.exports = {
-  convertDataToToken, verifyToken, hashPassword, comparePassword,
+  convertDataToToken, verifyToken, hashPassword, comparePassword, generateUUID,
 };

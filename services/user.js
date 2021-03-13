@@ -1,38 +1,25 @@
-const { v4: uuidv4 } = require('uuid');
-const { userArray } = require('../models');
+const { generateUUID } = require('../utils');
+const db = require('../db/setup');
+const { insertUser, getUserByEmail } = require('../db/queries/user');
 
-const addNewUser = (data) => {
-  const obj = {
-    ...data,
-    id: uuidv4(),
-    isAdmin: false,
-  };
-  userArray.push(obj);
-  return obj;
+const addNewUser = async (data) => {
+  const id = generateUUID();
+  const {
+    email, firstName, lastName, password, gender,
+  } = data;
+  return db.one(insertUser, [id, email, firstName, lastName, password, gender]);
 };
 
-const getSingleUserById = (id) => userArray.find((el) => el.id === id);
+const getSingleUserByEmail = async (email) => db.oneOrNone(getUserByEmail, [email]);
 
-const getSingleUserByEmail = (email) => userArray.find((el) => el.email === email);
+// const getSingleUserById
 
-const findUserIndex = (id) => userArray.findIndex((el) => el.id === id);
+// const findUserIndex
 
-const updateSingleUserProfile = (data, id) => {
-  const userDetails = getSingleUserById(id);
-  const updatedProfile = {
-    ...userDetails,
-    ...data,
-  };
-  const index = findUserIndex(id);
-  userArray[index] = updatedProfile;
-  return updatedProfile;
-};
+// const updateSingleUserProfile
 
-const deleteUser = (id) => {
-  const index = findUserIndex(id);
-  return userArray.splice(index, 1);
-};
+// const deleteUser
 
 module.exports = {
-  addNewUser, getSingleUserById, getSingleUserByEmail, updateSingleUserProfile, deleteUser,
+  addNewUser, getSingleUserByEmail,
 };

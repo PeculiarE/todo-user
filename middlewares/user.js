@@ -18,9 +18,9 @@ const validateSignUp = (req, res, next) => {
     });
   }
 };
-const checkIfUserExists = (req, res, next) => {
+const checkIfUserExists = async (req, res, next) => {
   try {
-    const user = getSingleUserByEmail(req.body.email);
+    const user = await getSingleUserByEmail(req.body.email);
     if (!user) {
       return next();
     }

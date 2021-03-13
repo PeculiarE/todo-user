@@ -6,9 +6,9 @@ const {
   getAllTodosForASingleUser,
 } = require('../services');
 
-const addTodo = (req, res) => {
+const addTodo = async (req, res) => {
   try {
-    const todo = addNewTodo(req.body, req.user.email);
+    const todo = await addNewTodo(req.body, req.user.id);
     res.status(201).json({
       status: 'Success',
       message: 'Todo added successfully',
@@ -66,9 +66,9 @@ const deleteTheTodo = (req, res) => {
   }
 };
 
-const allTodos = (req, res) => {
+const allTodosForSingleUser = async (req, res) => {
   try {
-    const todoList = req.user.isAdmin ? getAllTodos() : getAllTodosForASingleUser(req.user.email);
+    const todoList = await getAllTodosForASingleUser(req.user.id);
     res.status(200).json({
       status: 'Success',
       message: 'List of todos fetched successfully',
@@ -81,9 +81,9 @@ const allTodos = (req, res) => {
     });
   }
 };
-const adminAllTodos = (req, res) => {
+const adminAllTodos = async (req, res) => {
   try {
-    const todoListAdmin = getAllTodos();
+    const todoListAdmin = await getAllTodos();
     res.status(200).json({
       status: 'Success',
       message: 'All Todos fetched successfully',
@@ -102,6 +102,6 @@ module.exports = {
   fetchTodo,
   updateTodo,
   deleteTheTodo,
-  allTodos,
+  allTodosForSingleUser,
   adminAllTodos,
 };

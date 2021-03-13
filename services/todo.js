@@ -1,18 +1,22 @@
-const { v4: uuidv4 } = require('uuid');
-const { todoArray } = require('../models');
+const { generateUUID } = require('../utils');
+const db = require('../db/setup');
+const {
+  insertTodo, fetchAllTodos, fetchAllTodosForSingleUser, fetchSingleTodoById,
+} = require('../db/queries/todo');
 
-const addNewTodo = (data, owner) => {
-  const obj = {
-    ...data,
-    id: uuidv4(),
-    isComplete: false,
-    ownerEmail: owner,
-  };
-  todoArray.push(obj);
-  return obj;
+const addNewTodo = async (data, userId) => {
+  const id = generateUUID();
+  const { title } = data;
+  return db.one(insertTodo, [id, title, userId]);
 };
 
-const getSingleTodoById = (id) => todoArray.find((el) => el.id === id);
+const getAllTodos = async () => db.manyOrNone(fetchAllTodos);
+
+const getAllTodosForASingleUser = async (userId) => (
+  db.manyOrNone(fetchAllTodosForSingleUser, [userId])
+);
+
+const getSingleTodoById = async (todoId) => db.oneOrNone(fetchSingleTodoById, [todoId]);
 
 const getSingleTodoByTitle = (title) => (
   todoArray.find((el) => (
@@ -37,14 +41,6 @@ const deleteTodo = (id) => {
   const index = getTodoIndex(id);
   return todoArray.splice(index, 1);
 };
-
-const getAllTodos = () => todoArray;
-
-const getAllTodosForASingleUser = (email) => (
-  todoArray.filter((el) => (
-    el.ownerEmail === email
-  ))
-);
 
 module.exports = {
   addNewTodo,

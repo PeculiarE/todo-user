@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -16,6 +17,8 @@ const comparePassword = (plainPassword, hashedPassword) => (
   bcrypt.compareSync(plainPassword, hashedPassword)
 );
 
+const generateUUID = () => uuidv4();
+
 module.exports = {
-  convertDataToToken, verifyToken, hashPassword, comparePassword,
+  convertDataToToken, verifyToken, hashPassword, comparePassword, generateUUID,
 };
