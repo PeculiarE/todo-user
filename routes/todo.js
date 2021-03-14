@@ -2,8 +2,9 @@ const { Router } = require('express');
 const {
   addTodo,
   fetchTodo,
-  updateTodo,
+  updateTitleOfTodo,
   deleteTheTodo,
+  updateStatusOfTodo,
   allTodosForSingleUser,
   adminAllTodos,
 } = require('../controllers');
@@ -25,7 +26,8 @@ todoRouter.get('/todos', adminAccessValidator, adminAllTodos);
 todoRouter.use('/todo/:todoId', checkIfTodoExists, checkIfTodoIsForCurrentUser);
 
 todoRouter.get('/todo/:todoId', fetchTodo);
-todoRouter.put('/todo/:todoId', updateTodo);
+todoRouter.put('/todo/:todoId', updateTitleOfTodo);
 todoRouter.delete('/todo/:todoId', deleteTheTodo);
+todoRouter.patch('/todo/:todoId', updateStatusOfTodo);
 
 module.exports = todoRouter;

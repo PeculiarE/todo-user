@@ -19,10 +19,10 @@ const validateTodoAddition = (req, res, next) => {
   }
 };
 
-const checkIfTodoExists = (req, res, next) => {
+const checkIfTodoExists = async (req, res, next) => {
   try {
     const { todoId } = req.params;
-    const todo = getSingleTodoById(todoId);
+    const todo = await getSingleTodoById(todoId);
     if (todo) {
       req.todo = todo;
       return next();
@@ -38,9 +38,9 @@ const checkIfTodoExists = (req, res, next) => {
     });
   }
 };
-const checkIfTodoIsForCurrentUser = (req, res, next) => {
+const checkIfTodoIsForCurrentUser = async (req, res, next) => {
   try {
-    if (req.todo.ownerEmail === req.user.email || req.user.isAdmin) {
+    if (req.todo.user_id === req.user.id || req.user.is_admin) {
       return next();
     }
     return res.status(404).json({

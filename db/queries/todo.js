@@ -14,4 +14,20 @@ module.exports = {
   fetchSingleTodoById: `
     select * from todo
     where id = $1;`,
+  updateTodoTitle: `
+    update todo
+    set title = $1, updated_at = now()
+    where id = $2
+    returning *;
+    `,
+  deleteTodo: `
+    delete from todo
+    where id = $1;
+    `,
+  updateTodoStatus: `
+    update todo
+    set is_complete = $2, updated_at = now()
+    where id = $1
+    returning *;
+    `,
 };

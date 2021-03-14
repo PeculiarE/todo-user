@@ -1,7 +1,13 @@
 const { generateUUID } = require('../utils');
 const db = require('../db/setup');
 const {
-  insertTodo, fetchAllTodos, fetchAllTodosForSingleUser, fetchSingleTodoById,
+  insertTodo,
+  fetchAllTodos,
+  fetchAllTodosForSingleUser,
+  fetchSingleTodoById,
+  updateTodoTitle,
+  deleteTodo,
+  updateTodoStatus,
 } = require('../db/queries/todo');
 
 const addNewTodo = async (data, userId) => {
@@ -18,36 +24,22 @@ const getAllTodosForASingleUser = async (userId) => (
 
 const getSingleTodoById = async (todoId) => db.oneOrNone(fetchSingleTodoById, [todoId]);
 
-const getSingleTodoByTitle = (title) => (
-  todoArray.find((el) => (
-    el.title.toLowerCase() === title.toLowerCase()
-  ))
+// const getSingleTodoByTitle;
+
+const updateSingleTodoTitle = async (data, todoId) => db.one(updateTodoTitle, [data, todoId]);
+
+const deleteSingleTodo = async (todoId) => db.none(deleteTodo, [todoId]);
+
+const updateSingleTodoStatus = async (todoId, isComplete) => (
+  db.one(updateTodoStatus, [todoId, isComplete])
 );
-
-const getTodoIndex = (id) => todoArray.findIndex((el) => el.id === id);
-
-const updateSingleTodo = (data, id) => {
-  const todoDetails = getSingleTodoById(id);
-  const updatedTodo = {
-    ...todoDetails,
-    ...data,
-  };
-  const index = getTodoIndex(id);
-  todoArray[index] = updatedTodo;
-  return updatedTodo;
-};
-
-const deleteTodo = (id) => {
-  const index = getTodoIndex(id);
-  return todoArray.splice(index, 1);
-};
 
 module.exports = {
   addNewTodo,
   getSingleTodoById,
-  getSingleTodoByTitle,
-  updateSingleTodo,
-  deleteTodo,
+  updateSingleTodoTitle,
+  deleteSingleTodo,
   getAllTodos,
   getAllTodosForASingleUser,
+  updateSingleTodoStatus,
 };

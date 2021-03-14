@@ -1,9 +1,10 @@
 const {
   addNewTodo,
-  updateSingleTodo,
-  deleteTodo,
+  updateSingleTodoTitle,
+  deleteSingleTodo,
   getAllTodos,
   getAllTodosForASingleUser,
+  updateSingleTodoStatus,
 } = require('../services');
 
 const addTodo = async (req, res) => {
@@ -22,7 +23,7 @@ const addTodo = async (req, res) => {
   }
 };
 
-const fetchTodo = (req, res) => {
+const fetchTodo = async (req, res) => {
   try {
     res.status(200).json({
       status: 'Success',
@@ -36,9 +37,9 @@ const fetchTodo = (req, res) => {
     });
   }
 };
-const updateTodo = (req, res) => {
+const updateTitleOfTodo = async (req, res) => {
   try {
-    const theUpdatedTodo = updateSingleTodo(req.body, req.todo.id);
+    const theUpdatedTodo = await updateSingleTodoTitle(req.body.title, req.todo.id);
     res.status(200).json({
       status: 'Success',
       message: 'Todo updated successfully',
@@ -51,12 +52,29 @@ const updateTodo = (req, res) => {
     });
   }
 };
-const deleteTheTodo = (req, res) => {
+const deleteTheTodo = async (req, res) => {
   try {
-    deleteTodo(req.todo.id);
+    await deleteSingleTodo(req.todo.id);
     res.status(200).json({
       status: 'Success',
       message: 'Todo deleted successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'Fail',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+const updateStatusOfTodo = async (req, res) => {
+  try {
+    req.todo.is_complete = !req.todo.is_complete;
+    const theUpdatedStatus = await updateSingleTodoStatus(req.todo.id, req.todo.is_complete);
+    res.status(200).json({
+      status: 'Success',
+      message: 'Todo status updated successfully',
+      data: theUpdatedStatus,
     });
   } catch (error) {
     res.status(500).json({
@@ -100,8 +118,9 @@ const adminAllTodos = async (req, res) => {
 module.exports = {
   addTodo,
   fetchTodo,
-  updateTodo,
+  updateTitleOfTodo,
   deleteTheTodo,
+  updateStatusOfTodo,
   allTodosForSingleUser,
   adminAllTodos,
 };

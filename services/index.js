@@ -4,11 +4,11 @@ const {
 const {
   addNewTodo,
   getSingleTodoById,
-  getSingleTodoByTitle,
-  updateSingleTodo,
-  deleteTodo,
+  updateSingleTodoTitle,
+  deleteSingleTodo,
   getAllTodos,
   getAllTodosForASingleUser,
+  updateSingleTodoStatus,
 } = require('./todo');
 
 module.exports = {
@@ -16,9 +16,9 @@ module.exports = {
   getSingleUserByEmail,
   addNewTodo,
   getSingleTodoById,
-  getSingleTodoByTitle,
-  updateSingleTodo,
-  deleteTodo,
+  updateSingleTodoTitle,
+  deleteSingleTodo,
   getAllTodos,
   getAllTodosForASingleUser,
+  updateSingleTodoStatus,
 };

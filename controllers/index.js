@@ -2,8 +2,9 @@ const { registerUser, loginUser } = require('./user');
 const {
   addTodo,
   fetchTodo,
-  updateTodo,
+  updateTitleOfTodo,
   deleteTheTodo,
+  updateStatusOfTodo,
   allTodosForSingleUser,
   adminAllTodos,
 } = require('./todo');
@@ -13,8 +14,9 @@ module.exports = {
   loginUser,
   addTodo,
   fetchTodo,
-  updateTodo,
+  updateTitleOfTodo,
   deleteTheTodo,
+  updateStatusOfTodo,
   allTodosForSingleUser,
   adminAllTodos,
 };
